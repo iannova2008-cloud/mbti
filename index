@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학교생활 MBTI 테스트</title>
+    <style>
+        :root {
+            --primary-color: #2e7d32;
+            --primary-light: #e8f5e9;
+            --primary-dark: #1b5e20;
+            --text-color: #333333;
+            --bg-color: #f9fbf9;
+            --card-bg: #ffffff;
+            --border-color: #a5d6a7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: var(--card-bg);
+            max-width: 500px;
+            width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(46, 125, 50, 0.08);
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        /* 공통 숨김 */
+        .hidden {
+            display: none !important;
+        }
+
+        /* 메인 화면 */
+        h1 {
+            color: var(--primary-dark);
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .main-img {
+            font-size: 64px;
+            margin-bottom: 30px;
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* 테스트 화면 */
+        .stage-indicator {
+            font-size: 12px;
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background-color: var(--primary-light);
+            border-radius: 3px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .question-box {
+            font-size: 18px;
+            font-weight: bold;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            min-height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #111;
+        }
+
+        .answer-btn {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            margin-bottom: 12px;
+            text-align: left;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .answer-btn:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        /* 결과 화면 */
+        .result-type {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--primary-dark);
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+        }
+
+        .result-title {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 24px;
+        }
+
+        .result-desc {
+            background-color: var(--primary-light);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            color: var(--primary-dark);
+        }
+
+        .result-desc ul {
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+
+        .result-desc li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 1. 메인 시작 화면 -->
+        <div id="start-screen">
+            <div class="main-img">🏫</div>
+            <h1>학교생활로 보는 MBTI</h1>
+            <p class="subtitle">체계적인 7개의 학교 스테이지로 나의 성향 분석하기</p>
+            <button onclick="startTest()">테스트 시작하기</button>
+        </div>
+
+        <!-- 2. 테스트 진행 화면 -->
+        <div id="test-screen" class="hidden">
+            <div id="stage-tag" class="stage-indicator">STAGE 1. 등교길</div>
+            <div class="progress-bar-container">
+                <div id="progress" class="progress-bar"></div>
+            </div>
+            <div id="question" class="question-box">질문 텍스트가 들어가는 곳입니다.</div>
+            <button class="answer-btn" onclick="selectAnswer(0)">선택지 A</button>
+            <button class="answer-btn" onclick="selectAnswer(1)">선택지 B</button>
+        </div>
+
+        <!-- 3. 결과 화면 -->
+        <div id="result-screen" class="hidden">
+            <p class="subtitle">나의 학교생활 유형은?</p>
+            <div id="result-type" class="result-type">XXXX</div>
+            <div id="result-title" class="result-title">유형 수식어</div>
+            <div class="result-desc">
+                <strong>교실에서의 특징:</strong>
+                <ul id="result-features">
+                    <!-- 스크립트로 주입 -->
+                </ul>
+            </div>
+            <button onclick="restartTest()">다시 테스트하기</button>
+        </div>
+    </div>
+
+    <script>
+        // 체계적인 7단계 스테이지 시나리오 데이터 (지표별 3~4문항 배정)
+        const questions = [
+            {
+                stage: "STAGE 1. 등교길",
+                q: "교문에 들어서며 멀리서 아는 친구를 발견했을 때 나는?",
+                a: [{ text: "반갑게 소리치거나 달려가서 장난을 치며 같이 간다.", type: "E" },
+                    { text: "친하긴 하지만 조용히 뒤따라가서 자연스럽게 인사한다.", type: "I" }]
+            },
+            {
+                stage: "STAGE 1. 등교길",
+                q: "오늘따라 교문 지도 단속이 엄격하다. 내 생각은?",
+                a: [{ text: "안 걸리게 단정히 단속해야지. (규정대로 행동)", type: "S" },
+                    { text: "학칙은 왜 맨날 바뀔까? 복장과 성적의 상관관계는 뭘까 생각한다.", type: "N" }]
+            },
+            {
+                stage: "STAGE 2. 1교시 수업",
+                q: "새 학기 첫 수업, 선생님이 조별 과제를 공지하셨다.",
+                a: [{ text: "조원들과 빠르게 친해질 수 있겠다는 생각에 설렌다.", type: "E" },
+                    { text: "누구랑 조가 될지, 대화는 어떻게 이끌지 벌써 기가 찬다.", type: "I" }]
+            },
+            {
+                stage: "STAGE 2. 1교시 수업",
+                q: "필기할 때 내가 선호하는 방식은?",
+                a: [{ text: "칠판에 적힌 내용과 교과서 텍스트를 그대로 똑같이 받아적는다.", type: "S" },
+                    { text: "선생님 말씀 중 핵심 아이디어나 나만의 마인드맵 형태로 적는다.", type: "N" }]
+            },
+            {
+                stage: "STAGE 3. 쉬는 시간",
+                q: "친한 친구가 시험 문제를 밀려 써서 속상하다고 울고 있다.",
+                a: [{ text: "속상하겠다며 같이 울컥하고 친구의 마음을 진정시켜 준다.", type: "F" },
+                    { text: "몇 번 문제부터 밀려 썼는지 확인하고 다음 시험 점수를 계산해 본다.", type: "T" }]
+            },
+            {
+                stage: "STAGE 3. 쉬는 시간",
+                q: "다음 교시 체육 수업을 준비할 때 내 행동은?",
+                a: [{ text: "쉬는 시간 종이 치자마자 미리 체육복으로 갈아입고 대기한다.", type: "J" },
+                    { text: "종 치면 갈아입거나, 예비종 소리를 듣고 급하게 움직인다.", type: "P" }]
+            },
+            {
+                stage: "STAGE 4. 점심 시간",
+                q: "점심을 먹고 교정을 거닐 때 내 머릿속은?",
+                a: [{ text: "급식 맛 평가, 오늘 날씨, 5교시 과목 등 눈앞의 현실을 본다.", type: "S" },
+                    { text: "'만약 학교에 좀비가 나타나면 창문으로 탈출해야지' 같은 상상을 한다.", type: "N" }]
+            },
+            {
+                stage: "STAGE 4. 점심 시간",
+                q: "급식실 줄을 서 있는데 다른 반 친구가 고민이 있다며 말을 건다.",
+                a: [{ text: "내 일처럼 공감하며 열심히 들어주고 리액션해 준다.", type: "F" },
+                    { text: "고민의 원인을 분석하고 이렇게 해결해보라고 조언을 건넨다.", type: "T" }]
+            },
+            {
+                stage: "STAGE 5. 방과 후 동아리",
+                q: "축제 때 선보일 동아리 기획안을 짤 때 내 스타일은?",
+                a: [{ text: "일자별, 시간별로 필요한 준비물과 역할을 꼼꼼히 정리한다.", type: "J" },
+                    { text: "큰 틀만 정해두고 세부적인 건 진행 상황에 따라 유연하게 바꾼다.", type: "P" }]
+            },
+            {
+                stage: "STAGE 5. 방과 후 동아리",
+                q: "동아리방에 새로운 부원들이 대거 합류했다.",
+                a: [{ text: "먼저 다가가 말을 걸고 분위기를 주도하며 환영한다.", type: "E" },
+                    { text: "누가 먼저 말을 걸어줄 때까지 기다리며 상황을 살핀다.", type: "I" }]
+            },
+            {
+                stage: "STAGE 6. 시험 기간",
+                q: "중간고사를 앞둔 나의 공부 계획표는?",
+                a: [{ text: "일주일 단위, 하루 단위로 과목과 범위를 완벽하게 쪼개둔 계획표가 있다.", type: "J" },
+                    { text: "그날그날 더 당기는 과목이나 부족하다고 느껴지는 부분 위주로 공부한다.", type: "P" }]
+            },
+            {
+                stage: "STAGE 6. 시험 기간",
+                q: "공부하다가 모르는 복잡한 문제가 나왔을 때 나는?",
+                a: [{ text: "이 공식이 왜 유도되었는지 본질적인 개념원리부터 파고든다.", type: "N" },
+                    { text: "이해하기 어려우면 일단 유형별 풀이법과 암기 팁을 외운다.", type: "S" }]
+            },
+            {
+                stage: "STAGE 7. 성적표 수령",
+                q: "노력한 것에 비해 성적이 아쉽게 나왔을 때 선생님의 한마디 중 더 힘이 되는 것은?",
+                a: [{ text: "결과는 아쉽지만 그동안 매일 밤새며 성실하게 노력한 거 내가 다 알아.", type: "F" },
+                    { text: "취약한 파트 보완해서 다음 기말고사 때 반영하면 충분히 만회 가능해.", type: "T" }]
+            },
+            {
+                stage: "STAGE 7. 성적표 수령",
+                q: "성적표 수령 후 방학 계획을 세울 때 나의 모습은?",
+                a: [{ text: "시간대별 기상, 공부, 휴식 시간을 구조화한 계획대로 움직인다.", type: "J" },
+                    { text: "방학이니까 일단 쉬면서 하고 싶은 일이 생기면 그때그때 결정한다.", type: "P" }]
+            }
+        ];
+
+        // 결과 데이터 리스트
+        const results = {
+            ISTJ: { title: "완벽주의 학생회장 타입", features: ["성실함의 끝판왕, 교과서 위주의 정석 공부파", "숙제나 준비물을 잊어버리는 법이 없음", "갑작스러운 시간표 변경을 가장 싫어함"] },
+            ISFJ: { title: "교실 뒤편의 수호천사 타입", features: ["드러나지 않게 주변 친구들을 챙기는 다정한 성격", "노트 필기가 가장 깔끔해서 친구들이 자주 빌려달라고 함", "주목받는 발표 시간에는 심장이 터질 것 같음"] },
+            INFJ: { title: "철학적인 비밀주의자 타입", features: ["생각이 깊고 어른스러워 친구들의 깊은 고민 상담소 역할", "가끔 혼자만의 생각에 잠겨 창밖을 멍하니 바라봄", "친한 소수와 깊게 사귀는 편"] },
+            INTJ: { title: "걸어다니는 전교 1등 전략가 타입", features: ["효율성을 극대화한 독자적인 공부 루트를 가짐", "근거 없는 칭찬보다 명확한 팩트 피드백을 좋아함", "조별 과제 시 답답하면 본인이 하드캐리해버림"] },
+            ISTP: { title: "효율 추구형 마이웨이 타입", features: ["에너지 소비 최소화, 벼락치기의 일인자", "실습이나 체육 시간 등 몸으로 하는 활동에 강함", "말이 별로 없지만 가끔 툭 던지는 한마디가 웃김"] },
+            ISFP: { title: "예술가 기질의 프로 등교러 타입", features: ["갈등을 싫어해서 반에서 두루두루 평화롭게 지냄", "집에 가면 침대와 물아일체가 되어 에너지를 충전함", "다정하고 따뜻하지만 거절을 잘 못하는 편"] },
+            INFP: { title: "소설 속 주인공 같은 낭만파 타입", features: ["감수성이 풍부해서 수업 시간에도 혼자만의 상상 세계를 펼침", "마음이 약해 친구의 사소한 말투에도 혼자 상처받기 쉬움", "자신이 좋아하는 과목은 엄청난 몰입도를 보임"] },
+            INTP: { title: "방구석 아인슈타인 타입", features: ["관심 있는 주제가 생기면 선생님보다 더 깊게 파고듦", "시험 범위나 진도 같은 현실적인 규칙에 흥미가 없음", "조용해 보이지만 친한 친구 앞에서는 논리왕이 됨"] },
+            ESTP: { title: "골목대장 골든벨 스타 타입", features: ["넘치는 에너지로 쉬는 시간마다 교실 중심에 있음", "적응력이 뛰어나고 위기 대처 능력이 완벽함", "공부도 놀이처럼 타이트하게 집중해서 끝내는 편"] },
+            ESFP: { title: "학교 축제 기획사 대표 타입", features: ["리액션 장인, 교내에 모르는 친구가 없을 정도로 마당발", "혼자 조용히 자습하는 시간을 가장 견디기 힘들어함", "선생님들과도 친구처럼 장난치며 잘 지냄"] },
+            ENFP: { title: "교실 분위기 메이커 타입", features: ["호기심 가득, 매일 새로운 아이디어로 친구들을 즐겁게 함", "감정이 얼굴에 다 드러나서 거짓말을 못함", "시작은 거창하나 마무리가 살짝 아쉬운 편"] },
+            ENTP: { title: "토론 대회의 브레인 타입", features: ["선생님 의견에도 타당한 의문이 생기면 질문을 던짐", "반대 의견 반박할 때 카타르시스를 느낌", "평범하고 지루한 수업 방식은 거부하는 이단아"] },
+            ESTJ: { title: "지도력 만렙 반장 타입", features: ["흐트러지는 꼴을 못 봄, 조별 과제 시 하드 트레이너", "목표가 정해지면 뒤도 안 돌아보고 계획대로 돌진", "규칙과 예의를 중요하게 생각하는 정석 학생"] },
+            ESFJ: { title: "인기 만점 동아리 기장 타입", features: ["칭찬과 공감으로 조원들의 사기를 북돋아 주는 리더", "친구들의 생일이나 경조사를 가장 먼저 챙김", "집단 내에서 소외되는 친구가 있으면 마음이 쓰임"] },
+            ENFJ: { title: "모두를 이끄는 이상주의 리더 타입", features: ["정의롭고 따뜻하여 반 친구들이 믿고 따르는 편", "친구들의 성장을 진심으로 응원하고 도와줌", "남들의 시선을 다소 의식하여 혼자 피로감을 느끼기도 함"] },
+            ENTJ: { title: "야망 가득한 전교회장 타입", features: ["체계적이고 단호하게 학급의 비효율을 개선함", "어려운 과제가 주어질수록 승부욕이 불타오름", "감정에 치우치기보다 결과를 내는 것을 최우선으로 함"] }
+        };
+
+        let currentIdx = 0;
+        let scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+
+        function startTest() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('test-screen').classList.remove('hidden');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentIdx >= questions.length) {
+                showResult();
+                return;
+            }
+
+            const currentQ = questions[currentIdx];
+            document.getElementById('stage-tag').innerText = currentQ.stage;
+            document.getElementById('question').innerText = currentQ.q;
+            
+            const buttons = document.querySelectorAll('.answer-btn');
+            buttons[0].innerText = currentQ.a[0].text;
+            buttons[1].innerText = currentQ.a[1].text;
+
+            // 프로그레스 바 계산
+            const percent = (currentIdx / questions.length) * 100;
+            document.getElementById('progress').style.width = percent + '%';
+        }
+
+        function selectAnswer(btnIdx) {
+            const currentQ = questions[currentIdx];
+            const selectedType = currentQ.a[btnIdx].type;
+            
+            scores[selectedType]++;
+            currentIdx++;
+            showQuestion();
+        }
+
+        function showResult() {
+            document.getElementById('test-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            // MBTI 결과 조합
+            let mbti = "";
+            mbti += (scores.E >= scores.I) ? "E" : "I";
+            mbti += (scores.S >= scores.N) ? "S" : "N";
+            mbti += (scores.T >= scores.F) ? "T" : "F";
+            mbti += (scores.J >= scores.P) ? "J" : "P";
+
+            const resultData = results[mbti];
+
+            document.getElementById('result-type').innerText = mbti;
+            document.getElementById('result-title').innerText = resultData.title;
+
+            const featuresUl = document.getElementById('result-features');
+            featuresUl.innerHTML = ""; // 기존 내역 초기화
+            
+            resultData.features.forEach(feature => {
+                const li = document.createElement('li');
+                li.innerText = feature;
+                featuresUl.appendChild(li);
+            });
+        }
+
+        function restartTest() {
+            currentIdx = 0;
+            scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
