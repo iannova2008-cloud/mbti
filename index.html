@@ -3,330 +3,615 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>학교생활 MBTI 테스트</title>
+    <title>말랑말랑 학교생활 MBTI 테스트</title>
+    <!-- 귀여운 한글 폰트 불러오기 -->
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Nanum+Gothic:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            --primary-color: #2e7d32;
-            --primary-light: #e8f5e9;
-            --primary-dark: #1b5e20;
-            --text-color: #333333;
-            --bg-color: #f9fbf9;
+            --primary-color: #55a665; /* 파스텔 그린 */
+            --primary-light: #eef7f0; /* 부드러운 그린 크림 */
+            --primary-dark: #3b7a48; /* 깊은 숲속 그린 */
+            --accent-color: #ffd54f; /* 귀여운 파스텔 옐로우 */
+            --text-color: #2c3e50; /* 편안한 다크 블루그레이 */
+            --bg-color: #f3f9f4; /* 은은한 백그라운드 */
             --card-bg: #ffffff;
-            --border-color: #a5d6a7;
+            --border-color: #c8e6c9;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
         }
 
         body {
             background-color: var(--bg-color);
+            background-image: radial-gradient(#d0ebd5 1.5px, transparent 1.5px), radial-gradient(#d0ebd5 1.5px, #f3f9f4 1.5px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
             color: var(--text-color);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            font-family: 'Gaegu', 'Nanum Gothic', sans-serif;
+            overflow-x: hidden;
         }
 
+        /* 메인 컨테이너 */
         .container {
             background: var(--card-bg);
-            max-width: 500px;
+            max-width: 480px;
             width: 100%;
-            border-radius: 16px;
-            box-shadow: 0 8px 24px rgba(46, 125, 50, 0.08);
-            padding: 30px;
-            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            box-shadow: 0 12px 30px rgba(85, 166, 101, 0.15);
+            padding: 35px 25px;
+            border: 4px solid var(--primary-color);
             text-align: center;
+            position: relative;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
         }
 
-        /* 공통 숨김 */
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        /* 화면 숨김 */
         .hidden {
             display: none !important;
         }
 
-        /* 메인 화면 */
+        /* 🏠 상단 홈 버튼 */
+        .header-bar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+            width: 100%;
+            min-height: 35px;
+        }
+
+        .home-btn {
+            background: var(--primary-light);
+            border: 2px solid var(--primary-color);
+            border-radius: 15px;
+            color: var(--primary-dark);
+            cursor: pointer;
+            padding: 4px 12px;
+            font-family: 'Gaegu', sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .home-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* 타이틀 & 문구 */
         h1 {
             color: var(--primary-dark);
-            font-size: 24px;
-            margin-bottom: 12px;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-shadow: 1px 1px 0px #fff;
         }
 
         .subtitle {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 30px;
+            color: #618c6a;
+            font-size: 19px;
+            margin-bottom: 25px;
+            line-height: 1.3;
         }
 
-        .main-img {
-            font-size: 64px;
-            margin-bottom: 30px;
+        .main-illust {
+            font-size: 90px;
+            margin: 20px 0;
+            animation: bounce 2s infinite alternate;
         }
 
-        button {
+        /* 버튼류 */
+        button.action-btn {
             width: 100%;
             background-color: var(--primary-color);
             color: white;
             border: none;
             padding: 16px;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 20px;
+            font-family: 'Gaegu', sans-serif;
+            font-size: 24px;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.2s;
+            box-shadow: 0 6px 0px var(--primary-dark);
+            transition: all 0.1s ease;
+            position: relative;
         }
 
-        button:hover {
-            background-color: var(--primary-dark);
+        button.action-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0px var(--primary-dark);
         }
 
-        /* 테스트 화면 */
-        .stage-indicator {
-            font-size: 12px;
-            color: var(--primary-color);
+        /* 스테이지 진행 상황 */
+        .stage-tag {
+            font-size: 18px;
+            color: var(--primary-dark);
             font-weight: bold;
-            margin-bottom: 4px;
-            text-transform: uppercase;
+            margin-bottom: 6px;
         }
 
-        .progress-bar-container {
+        .progress-bg {
             width: 100%;
-            height: 6px;
+            height: 16px;
             background-color: var(--primary-light);
-            border-radius: 3px;
-            margin-bottom: 24px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            margin-bottom: 25px;
             overflow: hidden;
+            position: relative;
         }
 
-        .progress-bar {
+        .progress-fill {
             height: 100%;
             width: 0%;
             background-color: var(--primary-color);
+            background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+            background-size: 20px 20px;
             transition: width 0.3s ease;
         }
 
+        /* 질문 박스 */
         .question-box {
-            font-size: 18px;
+            font-size: 22px;
             font-weight: bold;
-            line-height: 1.5;
-            margin-bottom: 30px;
-            min-height: 54px;
+            line-height: 1.4;
+            margin-bottom: 25px;
+            min-height: 70px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #111;
+            background: var(--primary-light);
+            padding: 15px;
+            border-radius: 20px;
+            border: 2px dashed var(--primary-color);
         }
 
+        /* 선택지 버튼 */
         .answer-btn {
             background-color: var(--card-bg);
             color: var(--text-color);
-            border: 1px solid var(--border-color);
-            margin-bottom: 12px;
+            border: 3px solid var(--border-color);
+            margin-bottom: 15px;
             text-align: left;
-            font-weight: normal;
-            font-size: 14px;
-            line-height: 1.4;
+            font-weight: bold;
+            font-family: 'Gaegu', sans-serif;
+            font-size: 19px;
+            padding: 16px 20px;
+            border-radius: 20px;
+            width: 100%;
+            cursor: pointer;
+            box-shadow: 0 4px 0px var(--border-color);
+            transition: all 0.15s ease;
+            line-height: 1.3;
         }
 
         .answer-btn:hover {
             background-color: var(--primary-light);
-            color: var(--primary-dark);
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 0px var(--primary-color);
+            transform: translateY(-2px);
         }
 
-        /* 결과 화면 */
-        .result-type {
-            font-size: 32px;
+        .answer-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0px var(--primary-color);
+        }
+
+        /* 결과 화면 특화 스타일 */
+        .character-card {
+            background-color: #fff9e6;
+            border: 3px dashed #ffb300;
+            border-radius: 25px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .disney-char {
+            font-size: 28px;
+            color: #d32f2f;
             font-weight: bold;
-            color: var(--primary-dark);
-            margin-bottom: 4px;
-            letter-spacing: 1px;
-        }
-
-        .result-title {
-            font-size: 18px;
-            color: #555;
-            margin-bottom: 24px;
+            margin-top: 5px;
+            background: white;
+            display: inline-block;
+            padding: 4px 16px;
+            border-radius: 15px;
+            border: 2px solid #ffc107;
         }
 
         .result-desc {
             background-color: var(--primary-light);
-            padding: 20px;
-            border-radius: 8px;
+            padding: 15px 20px;
+            border-radius: 20px;
+            border: 2px solid var(--border-color);
             text-align: left;
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 24px;
+            font-size: 18px;
+            line-height: 1.5;
+            margin-bottom: 25px;
             color: var(--primary-dark);
         }
 
         .result-desc ul {
-            padding-left: 20px;
-            margin-top: 10px;
+            padding-left: 15px;
+            margin-top: 8px;
         }
 
         .result-desc li {
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+            list-style-type: '🌱 ';
+        }
+
+        /* 커스텀 경고 모달창 (처음으로 버튼 선택 시) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-box {
+            background: white;
+            border-radius: 25px;
+            border: 4px solid var(--primary-color);
+            padding: 25px;
+            max-width: 350px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-box h3 {
+            font-size: 24px;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+
+        .modal-box p {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .modal-btns {
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-btns button {
+            flex: 1;
+            padding: 10px;
+            font-family: 'Gaegu', sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-confirm {
+            background-color: #e57373;
+            color: white;
+        }
+
+        .btn-cancel {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* 이모티콘 파티 캔버스 */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* 애니메이션 모음 */
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
     </style>
 </head>
 <body>
 
+    <!-- 이모티콘 파티 흩날리기용 캔버스 -->
+    <canvas id="confetti-canvas"></canvas>
+
     <div class="container">
+        <!-- 🏠 상단 기능 바 -->
+        <div class="header-bar">
+            <button id="top-home-btn" class="home-btn hidden" onclick="confirmGoHome()">
+                🏠 처음으로
+            </button>
+        </div>
+
         <!-- 1. 메인 시작 화면 -->
         <div id="start-screen">
-            <div class="main-img">🏫</div>
-            <h1>학교생활로 보는 MBTI</h1>
-            <p class="subtitle">체계적인 7개의 학교 스테이지로 나의 성향 분석하기</p>
-            <button onclick="startTest()">테스트 시작하기</button>
+            <div class="main-illust">🎒🏫✨</div>
+            <h1>말랑말랑 학교생활 MBTI</h1>
+            <p class="subtitle">체계적인 7개의 학교생활 스테이지!<br>내가 만약 디즈니 속 주인공이라면 어떨까? 🧸</p>
+            <button class="action-btn" onclick="startTest()">테스트 시작하기 🚀</button>
         </div>
 
         <!-- 2. 테스트 진행 화면 -->
         <div id="test-screen" class="hidden">
-            <div id="stage-tag" class="stage-indicator">STAGE 1. 등교길</div>
-            <div class="progress-bar-container">
-                <div id="progress" class="progress-bar"></div>
+            <div id="stage-tag" class="stage-tag">🎒 STAGE 1. 등교길</div>
+            <div class="progress-bg">
+                <div id="progress" class="progress-fill"></div>
             </div>
-            <div id="question" class="question-box">질문 텍스트가 들어가는 곳입니다.</div>
-            <button class="answer-btn" onclick="selectAnswer(0)">선택지 A</button>
-            <button class="answer-btn" onclick="selectAnswer(1)">선택지 B</button>
+            <div id="question" class="question-box">질문지 로딩중... 🔍</div>
+            <button class="answer-btn" onclick="selectAnswer(0)">A 타입 선택문구</button>
+            <button class="answer-btn" onclick="selectAnswer(1)">B 타입 선택문구</button>
         </div>
 
         <!-- 3. 결과 화면 -->
         <div id="result-screen" class="hidden">
-            <p class="subtitle">나의 학교생활 유형은?</p>
-            <div id="result-type" class="result-type">XXXX</div>
-            <div id="result-title" class="result-title">유형 수식어</div>
+            <p class="subtitle">🎉 결과가 나왔어요! 🎉</p>
+            <div id="result-type" style="font-size: 38px; font-weight: bold; color: var(--primary-dark);">XXXX</div>
+            
+            <div class="character-card">
+                <div id="result-emoji" style="font-size: 60px; margin-bottom: 5px;">👑</div>
+                <div id="result-title" style="font-size: 22px; font-weight: bold; color: #555;">수식어</div>
+                <div id="result-disney" class="disney-char">디즈니 매칭 캐릭터</div>
+            </div>
+
             <div class="result-desc">
-                <strong>교실에서의 특징:</strong>
+                <strong>🏫 내 교실 속 모습 분석:</strong>
                 <ul id="result-features">
-                    <!-- 스크립트로 주입 -->
+                    <!-- 자바스크립트로 추가 -->
                 </ul>
             </div>
-            <button onclick="restartTest()">다시 테스트하기</button>
+            <button class="action-btn" onclick="restartTest()">다시 테스트하기 🔄</button>
+        </div>
+    </div>
+
+    <!-- 🏠 처음으로 가기 경고 모달창 -->
+    <div id="home-modal" class="modal-overlay hidden">
+        <div class="modal-box">
+            <h3>🏠 정말 홈화면으로 갈래?</h3>
+            <p>지금까지 성실하게 풀었던 학교생활 질문들이 모두 초기화돼! 🥺</p>
+            <div class="modal-btns">
+                <button class="btn-confirm" onclick="goHome()">응, 갈래!</button>
+                <button class="btn-cancel" onclick="closeHomeModal()">아니, 계속 풀래!</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // 체계적인 7단계 스테이지 시나리오 데이터 (지표별 3~4문항 배정)
+        // 스토리텔링형 7단계 스테이지 데이터 (14문항)
         const questions = [
             {
-                stage: "STAGE 1. 등교길",
-                q: "교문에 들어서며 멀리서 아는 친구를 발견했을 때 나는?",
-                a: [{ text: "반갑게 소리치거나 달려가서 장난을 치며 같이 간다.", type: "E" },
-                    { text: "친하긴 하지만 조용히 뒤따라가서 자연스럽게 인사한다.", type: "I" }]
+                stage: "🎒 STAGE 1. 등교길",
+                q: "🎒 교문에 들어서며 멀리서 아는 친구를 발견했을 때 나는?",
+                a: [{ text: "🏃‍♂️ 반갑게 소리치거나 마구 달려가서 친근하게 먼저 장난을 건다!", type: "E" },
+                    { text: "🤫 친하긴 하지만 조용히 뒤따라 걸어가면서 아주 자연스레 인사한다.", type: "I" }]
             },
             {
-                stage: "STAGE 1. 등교길",
-                q: "오늘따라 교문 지도 단속이 엄격하다. 내 생각은?",
-                a: [{ text: "안 걸리게 단정히 단속해야지. (규정대로 행동)", type: "S" },
-                    { text: "학칙은 왜 맨날 바뀔까? 복장과 성적의 상관관계는 뭘까 생각한다.", type: "N" }]
+                stage: "🎒 STAGE 1. 등교길",
+                q: "📏 오늘 교문 복장 단속이 엄청 빡세다! 이때 드는 내 생각은?",
+                a: [{ text: "👌 안 걸리게 옷매무새를 가다듬자! 규정에 어긋나지 않게 조심!", type: "S" },
+                    { text: "🤔 왜 양말 색깔까지 잡는 걸까? 복장과 성적에 어떤 상관관계가 있지?", type: "N" }]
             },
             {
-                stage: "STAGE 2. 1교시 수업",
-                q: "새 학기 첫 수업, 선생님이 조별 과제를 공지하셨다.",
-                a: [{ text: "조원들과 빠르게 친해질 수 있겠다는 생각에 설렌다.", type: "E" },
-                    { text: "누구랑 조가 될지, 대화는 어떻게 이끌지 벌써 기가 찬다.", type: "I" }]
+                stage: "📝 STAGE 2. 1교시 수업",
+                q: "🤝 첫 수업 시간, 선생님께서 조별 과제팀을 정해주셨다!",
+                a: [{ text: "🤩 와! 새로운 친구들이랑 팀플레이할 생각에 벌써 가슴이 두근거린다!", type: "E" },
+                    { text: "😰 하... 누구랑 조가 될까? 대화는 또 내가 먼저 시작해야 되나?", type: "I" }]
             },
             {
-                stage: "STAGE 2. 1교시 수업",
-                q: "필기할 때 내가 선호하는 방식은?",
-                a: [{ text: "칠판에 적힌 내용과 교과서 텍스트를 그대로 똑같이 받아적는다.", type: "S" },
-                    { text: "선생님 말씀 중 핵심 아이디어나 나만의 마인드맵 형태로 적는다.", type: "N" }]
+                stage: "📝 STAGE 2. 1교시 수업",
+                q: "✍️ 열심히 수업 필기를 하고 있는 나! 어떤 방식으로 적을까?",
+                a: [{ text: "📋 칠판에 적힌 필기 문장과 책 내용을 토씨 하나 틀리지 않고 꼼꼼히 적는다.", type: "S" },
+                    { text: "🎨 핵심 아이디어나 전체 흐름을 나만의 독창적인 마인드맵 형태로 적는다.", type: "N" }]
             },
             {
-                stage: "STAGE 3. 쉬는 시간",
-                q: "친한 친구가 시험 문제를 밀려 써서 속상하다고 울고 있다.",
-                a: [{ text: "속상하겠다며 같이 울컥하고 친구의 마음을 진정시켜 준다.", type: "F" },
-                    { text: "몇 번 문제부터 밀려 썼는지 확인하고 다음 시험 점수를 계산해 본다.", type: "T" }]
+                stage: "☕ STAGE 3. 쉬는 시간",
+                q: "😭 친한 친구가 시험 문제를 밀려 써서 속상하다고 울고 있을 때?",
+                a: [{ text: "🥺 헉... 속상하겠다며 같이 눈물을 글썽이며 꼭 안아주고 위로해 준다.", type: "F" },
+                    { text: "🧐 몇 번부터 밀려 썼는데? 마킹 실수 점수를 같이 계산해서 다음 대안을 세운다.", type: "T" }]
             },
             {
-                stage: "STAGE 3. 쉬는 시간",
-                q: "다음 교시 체육 수업을 준비할 때 내 행동은?",
-                a: [{ text: "쉬는 시간 종이 치자마자 미리 체육복으로 갈아입고 대기한다.", type: "J" },
-                    { text: "종 치면 갈아입거나, 예비종 소리를 듣고 급하게 움직인다.", type: "P" }]
+                stage: "☕ STAGE 3. 쉬는 시간",
+                q: "👟 다음 시간인 체육 수업을 준비해야 할 때 내 행동은?",
+                a: [{ text: "⚡ 쉬는 시간 종이 치자마자 체육실로 미리 가서 여유롭게 갈아입고 대기한다.", type: "J" },
+                    { text: "⏰ 종이 울린 후, 혹은 예비종이 들릴 때 부랴부랴 가방에서 꺼내 급하게 갈아입는다.", type: "P" }]
             },
             {
-                stage: "STAGE 4. 점심 시간",
-                q: "점심을 먹고 교정을 거닐 때 내 머릿속은?",
-                a: [{ text: "급식 맛 평가, 오늘 날씨, 5교시 과목 등 눈앞의 현실을 본다.", type: "S" },
-                    { text: "'만약 학교에 좀비가 나타나면 창문으로 탈출해야지' 같은 상상을 한다.", type: "N" }]
+                stage: "🍱 STAGE 4. 점심 시간",
+                q: "🌳 밥을 배불리 먹고 교정을 기분 좋게 산책할 때 내 머릿속은?",
+                a: [{ text: "🍱 방금 먹은 급식 반찬 이야기, 오늘 날씨, 다음 교시 숙제 등 현실 얘기를 한다.", type: "S" },
+                    { text: "🧟 만약 학교에 갑자기 좀비가 나타나면? 창가 커튼을 찢어 탈출해야지! 상상에 빠진다.", type: "N" }]
             },
             {
-                stage: "STAGE 4. 점심 시간",
-                q: "급식실 줄을 서 있는데 다른 반 친구가 고민이 있다며 말을 건다.",
-                a: [{ text: "내 일처럼 공감하며 열심히 들어주고 리액션해 준다.", type: "F" },
-                    { text: "고민의 원인을 분석하고 이렇게 해결해보라고 조언을 건넨다.", type: "T" }]
+                stage: "🍱 STAGE 4. 점심 시간",
+                q: "💬 다른 반 친구가 자판기 앞에서 한숨을 쉬며 깊은 고민을 털어놓는다.",
+                a: [{ text: "😭 '진짜 힘들었겠다...' 친구의 지친 마음에 100% 이입해서 같이 슬퍼해 준다.", type: "F" },
+                    { text: "💡 '그럼 이렇게 해보는 건 어때?' 현실적인 원인을 짚어보고 피드백을 제안한다.", type: "T" }]
             },
             {
-                stage: "STAGE 5. 방과 후 동아리",
-                q: "축제 때 선보일 동아리 기획안을 짤 때 내 스타일은?",
-                a: [{ text: "일자별, 시간별로 필요한 준비물과 역할을 꼼꼼히 정리한다.", type: "J" },
-                    { text: "큰 틀만 정해두고 세부적인 건 진행 상황에 따라 유연하게 바꾼다.", type: "P" }]
+                stage: "🎸 STAGE 5. 방과 후 동아리",
+                q: "🎪 다가오는 학교 축제에서 동아리 부스를 기획할 때 내 스타일은?",
+                a: [{ text: "🗓️ 일자별 예산, 담당 부원 역할 분담, 준비물 리스트를 칼같이 정리해 둔다.", type: "J" },
+                    { text: "🌈 큰 가이드라인만 짜두고 세세한 운영은 그날 축제 분위기에 맞게 유동적으로 한다.", type: "P" }]
             },
             {
-                stage: "STAGE 5. 방과 후 동아리",
-                q: "동아리방에 새로운 부원들이 대거 합류했다.",
-                a: [{ text: "먼저 다가가 말을 걸고 분위기를 주도하며 환영한다.", type: "E" },
-                    { text: "누가 먼저 말을 걸어줄 때까지 기다리며 상황을 살핀다.", type: "I" }]
+                stage: "🎸 STAGE 5. 방과 후 동아리",
+                q: "👋 우리 동아리에 낯선 타학교 신입 부원들이 들어왔을 때 나는?",
+                a: [{ text: "🥳 '안녕! 어디서 왔어?' 폭풍 친화력을 뽐내며 분위기를 띄운다.", type: "E" },
+                    { text: "👀 구석 자리에서 묵묵히 지켜보며 상대가 말을 걸어올 때까지 기다린다.", type: "I" }]
             },
             {
-                stage: "STAGE 6. 시험 기간",
-                q: "중간고사를 앞둔 나의 공부 계획표는?",
-                a: [{ text: "일주일 단위, 하루 단위로 과목과 범위를 완벽하게 쪼개둔 계획표가 있다.", type: "J" },
-                    { text: "그날그날 더 당기는 과목이나 부족하다고 느껴지는 부분 위주로 공부한다.", type: "P" }]
+                stage: "✍️ STAGE 6. 시험 기간",
+                q: "📅 시험을 정확히 2주일 앞두고 계획을 짜는 내 모습은?",
+                a: [{ text: "✏️ 1일 차 수학 2단원 완료, 2일 차 영어 단어 암기 등 디테일하고 깔끔한 계획표를 소지한다.", type: "J" },
+                    { text: "📚 계획은 머릿속에만 가볍게! 그날그날 공부가 가장 잘되는 과목 위주로 몰아서 달린다.", type: "P" }]
             },
             {
-                stage: "STAGE 6. 시험 기간",
-                q: "공부하다가 모르는 복잡한 문제가 나왔을 때 나는?",
-                a: [{ text: "이 공식이 왜 유도되었는지 본질적인 개념원리부터 파고든다.", type: "N" },
-                    { text: "이해하기 어려우면 일단 유형별 풀이법과 암기 팁을 외운다.", type: "S" }]
+                stage: "✍️ STAGE 6. 시험 기간",
+                q: "🤯 너무 난해하고 복잡한 수학 공식이 시험 범위에 추가되었을 때?",
+                a: [{ text: "🔍 이 공식이 어째서 이렇게 증명되었는지 깊은 학술적 원리와 개념부터 파헤친다.", type: "N" },
+                    { text: "💾 이해하기 어려우면 일단 외우고 본다! 시험 문제 유형과 대입법만 달달 암기한다.", type: "S" }]
             },
             {
-                stage: "STAGE 7. 성적표 수령",
-                q: "노력한 것에 비해 성적이 아쉽게 나왔을 때 선생님의 한마디 중 더 힘이 되는 것은?",
-                a: [{ text: "결과는 아쉽지만 그동안 매일 밤새며 성실하게 노력한 거 내가 다 알아.", type: "F" },
-                    { text: "취약한 파트 보완해서 다음 기말고사 때 반영하면 충분히 만회 가능해.", type: "T" }]
+                stage: "📜 STAGE 7. 성적표 수령",
+                q: "😢 열심히 했는데 결과가 아쉽게 나왔다. 이때 선생님의 피드백 중 나를 울컥하게 하는 것은?",
+                a: [{ text: "💌 '결과는 아쉽지만 너 매일 밤샘 자습하면서 성실히 해온 거 다 알아. 넌 멋져!'", type: "F" },
+                    { text: "📊 '이번에 주관식 감점이 크네. 오답 노트를 기반으로 다음 기말에 보완하면 문제없어.'", type: "T" }]
             },
             {
-                stage: "STAGE 7. 성적표 수령",
-                q: "성적표 수령 후 방학 계획을 세울 때 나의 모습은?",
-                a: [{ text: "시간대별 기상, 공부, 휴식 시간을 구조화한 계획대로 움직인다.", type: "J" },
-                    { text: "방학이니까 일단 쉬면서 하고 싶은 일이 생기면 그때그때 결정한다.", type: "P" }]
+                stage: "📜 STAGE 7. 성적표 수령",
+                q: "🏖️ 시험이 끝나고 마침내 찾아온 기분 좋은 겨울방학 계획표는?",
+                a: [{ text: "⏰ 기상 08:00, 독서 2시간, 운동 1시간 등 구조화된 일정표를 방에 붙여둔다.", type: "J" },
+                    { text: "🛌 늦잠을 푹 자고 일어나서 그날 먹고 싶은 거, 보고 싶은 영화 보며 프리하게 힐링한다.", type: "P" }]
             }
         ];
 
-        // 결과 데이터 리스트
+        // 디즈니 캐릭터 매칭을 포함한 결과 데이터
         const results = {
-            ISTJ: { title: "완벽주의 학생회장 타입", features: ["성실함의 끝판왕, 교과서 위주의 정석 공부파", "숙제나 준비물을 잊어버리는 법이 없음", "갑작스러운 시간표 변경을 가장 싫어함"] },
-            ISFJ: { title: "교실 뒤편의 수호천사 타입", features: ["드러나지 않게 주변 친구들을 챙기는 다정한 성격", "노트 필기가 가장 깔끔해서 친구들이 자주 빌려달라고 함", "주목받는 발표 시간에는 심장이 터질 것 같음"] },
-            INFJ: { title: "철학적인 비밀주의자 타입", features: ["생각이 깊고 어른스러워 친구들의 깊은 고민 상담소 역할", "가끔 혼자만의 생각에 잠겨 창밖을 멍하니 바라봄", "친한 소수와 깊게 사귀는 편"] },
-            INTJ: { title: "걸어다니는 전교 1등 전략가 타입", features: ["효율성을 극대화한 독자적인 공부 루트를 가짐", "근거 없는 칭찬보다 명확한 팩트 피드백을 좋아함", "조별 과제 시 답답하면 본인이 하드캐리해버림"] },
-            ISTP: { title: "효율 추구형 마이웨이 타입", features: ["에너지 소비 최소화, 벼락치기의 일인자", "실습이나 체육 시간 등 몸으로 하는 활동에 강함", "말이 별로 없지만 가끔 툭 던지는 한마디가 웃김"] },
-            ISFP: { title: "예술가 기질의 프로 등교러 타입", features: ["갈등을 싫어해서 반에서 두루두루 평화롭게 지냄", "집에 가면 침대와 물아일체가 되어 에너지를 충전함", "다정하고 따뜻하지만 거절을 잘 못하는 편"] },
-            INFP: { title: "소설 속 주인공 같은 낭만파 타입", features: ["감수성이 풍부해서 수업 시간에도 혼자만의 상상 세계를 펼침", "마음이 약해 친구의 사소한 말투에도 혼자 상처받기 쉬움", "자신이 좋아하는 과목은 엄청난 몰입도를 보임"] },
-            INTP: { title: "방구석 아인슈타인 타입", features: ["관심 있는 주제가 생기면 선생님보다 더 깊게 파고듦", "시험 범위나 진도 같은 현실적인 규칙에 흥미가 없음", "조용해 보이지만 친한 친구 앞에서는 논리왕이 됨"] },
-            ESTP: { title: "골목대장 골든벨 스타 타입", features: ["넘치는 에너지로 쉬는 시간마다 교실 중심에 있음", "적응력이 뛰어나고 위기 대처 능력이 완벽함", "공부도 놀이처럼 타이트하게 집중해서 끝내는 편"] },
-            ESFP: { title: "학교 축제 기획사 대표 타입", features: ["리액션 장인, 교내에 모르는 친구가 없을 정도로 마당발", "혼자 조용히 자습하는 시간을 가장 견디기 힘들어함", "선생님들과도 친구처럼 장난치며 잘 지냄"] },
-            ENFP: { title: "교실 분위기 메이커 타입", features: ["호기심 가득, 매일 새로운 아이디어로 친구들을 즐겁게 함", "감정이 얼굴에 다 드러나서 거짓말을 못함", "시작은 거창하나 마무리가 살짝 아쉬운 편"] },
-            ENTP: { title: "토론 대회의 브레인 타입", features: ["선생님 의견에도 타당한 의문이 생기면 질문을 던짐", "반대 의견 반박할 때 카타르시스를 느낌", "평범하고 지루한 수업 방식은 거부하는 이단아"] },
-            ESTJ: { title: "지도력 만렙 반장 타입", features: ["흐트러지는 꼴을 못 봄, 조별 과제 시 하드 트레이너", "목표가 정해지면 뒤도 안 돌아보고 계획대로 돌진", "규칙과 예의를 중요하게 생각하는 정석 학생"] },
-            ESFJ: { title: "인기 만점 동아리 기장 타입", features: ["칭찬과 공감으로 조원들의 사기를 북돋아 주는 리더", "친구들의 생일이나 경조사를 가장 먼저 챙김", "집단 내에서 소외되는 친구가 있으면 마음이 쓰임"] },
-            ENFJ: { title: "모두를 이끄는 이상주의 리더 타입", features: ["정의롭고 따뜻하여 반 친구들이 믿고 따르는 편", "친구들의 성장을 진심으로 응원하고 도와줌", "남들의 시선을 다소 의식하여 혼자 피로감을 느끼기도 함"] },
-            ENTJ: { title: "야망 가득한 전교회장 타입", features: ["체계적이고 단호하게 학급의 비효율을 개선함", "어려운 과제가 주어질수록 승부욕이 불타오름", "감정에 치우치기보다 결과를 내는 것을 최우선으로 함"] }
+            ISTJ: {
+                title: "규칙을 사랑하는 얼음공주/왕자",
+                disney: "엘사 (겨울왕국)",
+                emoji: "❄️👸",
+                features: ["성실함 끝판왕, 교과서대로 차분하게 공부하는 정석파예요.", "내 준비물이 완벽하게 갖춰지지 않으면 마음이 불안해요.", "친구들 사이에서 무척 어른스럽고 책임감 강하다는 말을 자주 들어요."]
+            },
+            ISFJ: {
+                title: "교실의 마음 따뜻한 유리구두 요정",
+                disney: "신데렐라",
+                emoji: "👡✨",
+                features: ["말은 없지만 주변 친구들의 사소한 장단점이나 성향을 찰떡같이 알아요.", "갈등이나 불화를 가장 싫어하며, 늘 묵묵하게 양보하고 배려해요.", "내 일보다 조원들이 다투지 않고 하하호호 조별과제를 완수하는 게 더 행복해요."]
+            },
+            INFJ: {
+                title: "책 한 권 들고 사색하는 낭만주의자",
+                disney: "벨 (미녀와 야수)",
+                emoji: "🌹📚",
+                features: ["외면보단 내면의 철학과 감수성이 엄청나게 깊은 신비로운 성격이에요.", "친한 소수와 깊은 속얘기를 나누는 대화를 진심으로 즐겨요.", "가끔 책을 읽거나 하늘을 보며 혼자만의 예쁜 비밀 상상에 잠겨요."]
+            },
+            INTJ: {
+                title: "시크하지만 누구보다 철저한 야수왕",
+                disney: "야수 (미녀와 야수)",
+                emoji: "🦁🏰",
+                features: ["체계적인 규칙이 무너지면 효율성이 깨진다고 느껴 화가 날 때가 있어요.", "공부나 학급 활동 시 혼자만의 단단한 완벽주의 전략 루트가 있어요.", "겉은 굉장히 시크해 보이지만 나를 무장해제 시킨 친구에겐 아낌없이 헌신해요."]
+            },
+            ISTP: {
+                title: "실용적이고 쿨한 전장의 해결사",
+                disney: "뮬란",
+                emoji: "⚔️🐉",
+                features: ["평소 에너지를 엄청 아끼는 조용한 성격이지만 위기 대처는 1등이에요.", "귀차니즘이 조금 있어서 벼락치기로 대활약할 때가 많아요.", "말투가 다소 묵직하지만 가끔 뼈 때리는 조언으로 친구들에게 도움을 줘요."]
+            },
+            ISFP: {
+                title: "평화로운 예술가 꿈나무",
+                disney: "오로라 공주 (잠자는 숲속의 공주)",
+                emoji: "👑💤",
+                features: ["상냥하고 온화한 성격 덕에 반 친구 모두가 나를 편하게 느껴요.", "나만의 소소한 패션 아이템이나 미적 취향이 뚜렷하게 발달해 있어요.", "지나친 간섭이나 강압적인 교칙 아래 있으면 이불 속으로 쏙 도망치고 싶어요."]
+            },
+            INFP: {
+                title: "육지를 꿈꾸는 맑은 영혼의 인어공주",
+                disney: "아리엘 (인어공주)",
+                emoji: "🧜‍♀️🌊",
+                features: ["꿈과 이상을 잃지 않는 아름다운 몽상가 스타일이에요.", "감정선이 섬세하고 여려 사소한 말이나 분위기에도 기분이 훅 바뀔 때가 있어요.", "남들은 '엉뚱하다'고 생각하는 독특한 상상력을 엄청 소중히 간직해요."]
+            },
+            INTP: {
+                title: "엉뚱한 매력의 명탐정",
+                disney: "앨리스 (이상한 나라의 앨리스)",
+                emoji: "🐰🎩",
+                features: ["'선생님, 그건 왜 그래요?' 수업 시간 당연한 것에도 질문을 품는 탐구파예요.", "하나에 흥미를 느끼면 주변의 부름도 잊은 채 무한히 집중해요.", "논리적이지 못한 주장을 마주하면 조용히 팩트로 지적할 때가 있어요."]
+            },
+            ESTP: {
+                title: "자신감 뿜뿜! 분위기 하이재커",
+                disney: "플린 라이더 (라푼젤)",
+                emoji: "🧗‍♂️😏",
+                features: ["임기응변과 스릴을 즐기는 뛰어난 감각의 소유자예요.", "교실 자리에 조용히 앉아 있는 따분한 수업보단 몸을 쓰는 야외 활동이 최고예요.", "유머가 넘치고 센스가 대단해서 한마디로 주위를 초토화하는 유쾌한 매력이 있어요."]
+            },
+            ESFP: {
+                title: "언제나 비타민 충전 100% 비글 요정",
+                disney: "기쁨이 (인사이드 아웃)",
+                emoji: "💛🌈",
+                features: ["슬플 틈을 주지 않는 우주 최강 친화력과 긍정 파워를 자랑해요.", "우리 반에선 내가 모르는 소문이나 비하인드가 존재할 수 없어요.", "리액션이 아주 커서 주위 사람들의 사기 진작에 이바지해요."]
+            },
+            ENFP: {
+                title: "통통 튀는 매력의 탑 밖 상상대장",
+                disney: "라푼젤",
+                emoji: "🍳🎨",
+                features: ["호기심 왕성! 매일 '이것도 해보고 저것도 해봐야지' 열정이 활활 불타요.", "눈물이 참 많고 친구들의 희로애락에 완벽하게 동화되는 울보 대장이에요.", "벌려놓은 동아리와 프로젝트는 많지만 가끔 꼼꼼한 마무리를 빼먹어 머쓱해요."]
+            },
+            ENTP: {
+                title: "능글능글 토론 대회의 황제",
+                disney: "닉 와일드 (주토피아)",
+                emoji: "🦊👔",
+                features: ["똑 부러지는 재치와 장난기 어린 눈빛으로 규칙을 요리조리 파고들어요.", "고루한 전통이나 똑같이 따라 하는 시험 공부방식에 거부감을 느껴요.", "말 한마디로 남들을 설득하거나 상대방과 말싸움할 때 엔돌핀이 막 솟구쳐요."]
+            },
+            ESTJ: {
+                title: "목표를 향해 한 치의 오차도 없는 공주님",
+                disney: "티아나 (공주와 개구리)",
+                emoji: "🐸👑",
+                features: ["시간 엄수, 마감 기한 사수는 나의 우주적인 불문율이에요.", "조장이 되면 칼같이 일을 배분하고 게으름 피우는 조원들을 잘 설득해요.", "현실적인 결과물과 수치화된 등수를 마주할 때 승부욕이 가장 크게 꿈틀대요."]
+            },
+            ESFJ: {
+                title: "언제나 친구 편인 든든한 보안관 대장",
+                disney: "우디 (토이 스토리)",
+                emoji: "🤠⭐",
+                features: ["새 학기 때 소외되는 친구가 보이면 마음이 쓰여 꼭 챙겨주는 착한 영혼이에요.", "선물이나 편지로 소소한 기념일을 살뜰하게 챙기는 걸 너무 좋아해요.", "선생님들과 친구들 사이에서 단단한 신뢰의 아이콘으로 통해요."]
+            },
+            ENFJ: {
+                title: "정의감과 열정으로 똘똘 뭉친 경찰관",
+                disney: "주디 홉스 (주토피아)",
+                emoji: "🐰👮‍♀️",
+                features: ["밝은 에너지와 투철한 정의감으로 반장 자리에 제격인 타입이에요.", "누구든지 주눅 들어 있으면 '넌 할 수 있어!' 진심을 담아 기를 팍팍 살려줘요.", "남들의 조그마한 비판이나 눈길에도 마음의 상처를 은근히 쉽게 입어요."]
+            },
+            ENTJ: {
+                title: "우주 끝까지 지휘하는 든든한 사령관",
+                disney: "버즈 라이트이어 (토이 스토리)",
+                emoji: "🚀🧑‍🚀",
+                features: ["어려운 수행평가를 마주할수록 기가 죽기는커녕 열의에 불타올라요.", "장기적인 대학 진학이나 야심 찬 계획을 미리 짜두고 실천하는 야망가예요.", "우는 소리를 들어주기보단 현실적인 방향을 직설적으로 딱 정리해 주는 깔끔 대왕이에요."]
+            }
         };
 
         let currentIdx = 0;
         let scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+        let confettiInterval;
 
+        // 테스트 시작
         function startTest() {
             document.getElementById('start-screen').classList.add('hidden');
             document.getElementById('test-screen').classList.remove('hidden');
+            document.getElementById('top-home-btn').classList.remove('hidden');
             showQuestion();
         }
 
+        // 질문 표출
         function showQuestion() {
             if (currentIdx >= questions.length) {
                 showResult();
@@ -341,11 +626,12 @@
             buttons[0].innerText = currentQ.a[0].text;
             buttons[1].innerText = currentQ.a[1].text;
 
-            // 프로그레스 바 계산
+            // 프로그레스바 반영
             const percent = (currentIdx / questions.length) * 100;
             document.getElementById('progress').style.width = percent + '%';
         }
 
+        // 답변 클릭
         function selectAnswer(btnIdx) {
             const currentQ = questions[currentIdx];
             const selectedType = currentQ.a[btnIdx].type;
@@ -355,11 +641,13 @@
             showQuestion();
         }
 
+        // 결과 보기
         function showResult() {
             document.getElementById('test-screen').classList.add('hidden');
+            document.getElementById('top-home-btn').classList.add('hidden');
             document.getElementById('result-screen').classList.remove('hidden');
 
-            // MBTI 결과 조합
+            // MBTI 점수 연산
             let mbti = "";
             mbti += (scores.E >= scores.I) ? "E" : "I";
             mbti += (scores.S >= scores.N) ? "S" : "N";
@@ -369,24 +657,117 @@
             const resultData = results[mbti];
 
             document.getElementById('result-type').innerText = mbti;
+            document.getElementById('result-emoji').innerText = resultData.emoji;
             document.getElementById('result-title').innerText = resultData.title;
+            document.getElementById('result-disney').innerText = "🏰 " + resultData.disney;
 
             const featuresUl = document.getElementById('result-features');
-            featuresUl.innerHTML = ""; // 기존 내역 초기화
+            featuresUl.innerHTML = "";
             
             resultData.features.forEach(feature => {
                 const li = document.createElement('li');
                 li.innerText = feature;
                 featuresUl.appendChild(li);
             });
+
+            // 이모티콘 파티 시작!
+            startConfettiParty();
         }
 
+        // 🏠 처음으로 버튼 확인 모달 노출
+        function confirmGoHome() {
+            document.getElementById('home-modal').classList.remove('hidden');
+        }
+
+        // 모달창 닫기
+        function closeHomeModal() {
+            document.getElementById('home-modal').classList.add('hidden');
+        }
+
+        // 초기화하고 진짜 홈으로 이동
+        function goHome() {
+            closeHomeModal();
+            restartTest();
+        }
+
+        // 테스트 완전 리셋
         function restartTest() {
             currentIdx = 0;
             scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+            stopConfettiParty();
             document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('test-screen').classList.add('hidden');
+            document.getElementById('top-home-btn').classList.add('hidden');
             document.getElementById('start-screen').classList.remove('hidden');
+        }
+
+        /* --- 이모티콘 파티 흩날리기 알고리즘 (HTML Canvas 기반) --- */
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let emojis = ["🎒", "📚", "🎨", "🐸", "✨", "👑", "🏫", "🌟", "🦁", "🧜‍♀️", "🤠", "🐰", "🍳"];
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        class ConfettiParticle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = -50 - (Math.random() * canvas.height);
+                this.size = 20 + Math.random() * 20;
+                this.emoji = emojis[Math.floor(Math.random() * emojis.length)];
+                this.speedX = -2 + Math.random() * 4;
+                this.speedY = 2 + Math.random() * 4;
+                this.rotation = Math.random() * 360;
+                this.rotSpeed = -1 + Math.random() * 2;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.rotation += this.rotSpeed;
+                if (this.y > canvas.height + 50) {
+                    this.y = -50;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation * Math.PI / 180);
+                ctx.font = `${this.size}px Arial`;
+                ctx.fillText(this.emoji, 0, 0);
+                ctx.restore();
+            }
+        }
+
+        function startConfettiParty() {
+            resizeCanvas();
+            particles = [];
+            for (let i = 0; i < 40; i++) {
+                particles.push(new ConfettiParticle());
+            }
+            
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                confettiInterval = requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        function stopConfettiParty() {
+            cancelAnimationFrame(confettiInterval);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
     </script>
 </body>
 </html>
+```eof
+
+원하시는 조건에 맞춰 더욱 사랑스럽고 완성도 높은 고품질 웹앱을 완성했습니다! 예쁘게 활용해 보시고 혹시 더 수정하고 싶은 부분이 있다면 언제든 편하게 말씀해 주세요. :)
