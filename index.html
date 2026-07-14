@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>말랑말랑 학교생활 MBTI 테스트</title>
+    <title>학교생활 MBTI 테스트</title>
     <!-- 귀여운 한글 폰트 불러오기 -->
     <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Nanum+Gothic:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -98,7 +98,7 @@
         /* 타이틀 & 문구 */
         h1 {
             color: var(--primary-dark);
-            font-size: 32px;
+            font-size: 34px;
             font-weight: 700;
             margin-bottom: 8px;
             text-shadow: 1px 1px 0px #fff;
@@ -258,7 +258,7 @@
             list-style-type: '🌱 ';
         }
 
-        /* 커스텀 경고 모달창 (처음으로 버튼 선택 시) */
+        /* 커스텀 경고 모달창 */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -347,7 +347,6 @@
 </head>
 <body>
 
-    <!-- 이모티콘 파티 흩날리기용 캔버스 -->
     <canvas id="confetti-canvas"></canvas>
 
     <div class="container">
@@ -360,9 +359,9 @@
 
         <!-- 1. 메인 시작 화면 -->
         <div id="start-screen">
-            <div class="main-illust">🎒🏫✨</div>
-            <h1>말랑말랑 학교생활 MBTI</h1>
-            <p class="subtitle">체계적인 7개의 학교생활 스테이지!<br>내가 만약 디즈니 속 주인공이라면 어떨까? 🧸</p>
+            <div class="main-illust">🏫</div>
+            <h1>학교생활 MBTI 테스트</h1>
+            <p class="subtitle">나와 어울리는 디즈니 캐릭터 찾기</p>
             <button class="action-btn" onclick="startTest()">테스트 시작하기 🚀</button>
         </div>
 
@@ -379,7 +378,7 @@
 
         <!-- 3. 결과 화면 -->
         <div id="result-screen" class="hidden">
-            <p class="subtitle">🎉 결과가 나왔어요! 🎉</p>
+            <p class="subtitle">🎉 나의 분석 결과 🎉</p>
             <div id="result-type" style="font-size: 38px; font-weight: bold; color: var(--primary-dark);">XXXX</div>
             
             <div class="character-card">
@@ -402,7 +401,7 @@
     <div id="home-modal" class="modal-overlay hidden">
         <div class="modal-box">
             <h3>🏠 정말 홈화면으로 갈래?</h3>
-            <p>지금까지 성실하게 풀었던 학교생활 질문들이 모두 초기화돼! 🥺</p>
+            <p>지금까지 풀었던 테스트 진행 사항이 모두 초기화돼!</p>
             <div class="modal-btns">
                 <button class="btn-confirm" onclick="goHome()">응, 갈래!</button>
                 <button class="btn-cancel" onclick="closeHomeModal()">아니, 계속 풀래!</button>
@@ -411,7 +410,7 @@
     </div>
 
     <script>
-        // 스토리텔링형 7단계 스테이지 데이터 (14문항)
+        // 시나리오 및 매칭 데이터
         const questions = [
             {
                 stage: "🎒 STAGE 1. 등교길",
@@ -499,111 +498,29 @@
             }
         ];
 
-        // 디즈니 캐릭터 매칭을 포함한 결과 데이터
         const results = {
-            ISTJ: {
-                title: "규칙을 사랑하는 얼음공주/왕자",
-                disney: "엘사 (겨울왕국)",
-                emoji: "❄️👸",
-                features: ["성실함 끝판왕, 교과서대로 차분하게 공부하는 정석파예요.", "내 준비물이 완벽하게 갖춰지지 않으면 마음이 불안해요.", "친구들 사이에서 무척 어른스럽고 책임감 강하다는 말을 자주 들어요."]
-            },
-            ISFJ: {
-                title: "교실의 마음 따뜻한 유리구두 요정",
-                disney: "신데렐라",
-                emoji: "👡✨",
-                features: ["말은 없지만 주변 친구들의 사소한 장단점이나 성향을 찰떡같이 알아요.", "갈등이나 불화를 가장 싫어하며, 늘 묵묵하게 양보하고 배려해요.", "내 일보다 조원들이 다투지 않고 하하호호 조별과제를 완수하는 게 더 행복해요."]
-            },
-            INFJ: {
-                title: "책 한 권 들고 사색하는 낭만주의자",
-                disney: "벨 (미녀와 야수)",
-                emoji: "🌹📚",
-                features: ["외면보단 내면의 철학과 감수성이 엄청나게 깊은 신비로운 성격이에요.", "친한 소수와 깊은 속얘기를 나누는 대화를 진심으로 즐겨요.", "가끔 책을 읽거나 하늘을 보며 혼자만의 예쁜 비밀 상상에 잠겨요."]
-            },
-            INTJ: {
-                title: "시크하지만 누구보다 철저한 야수왕",
-                disney: "야수 (미녀와 야수)",
-                emoji: "🦁🏰",
-                features: ["체계적인 규칙이 무너지면 효율성이 깨진다고 느껴 화가 날 때가 있어요.", "공부나 학급 활동 시 혼자만의 단단한 완벽주의 전략 루트가 있어요.", "겉은 굉장히 시크해 보이지만 나를 무장해제 시킨 친구에겐 아낌없이 헌신해요."]
-            },
-            ISTP: {
-                title: "실용적이고 쿨한 전장의 해결사",
-                disney: "뮬란",
-                emoji: "⚔️🐉",
-                features: ["평소 에너지를 엄청 아끼는 조용한 성격이지만 위기 대처는 1등이에요.", "귀차니즘이 조금 있어서 벼락치기로 대활약할 때가 많아요.", "말투가 다소 묵직하지만 가끔 뼈 때리는 조언으로 친구들에게 도움을 줘요."]
-            },
-            ISFP: {
-                title: "평화로운 예술가 꿈나무",
-                disney: "오로라 공주 (잠자는 숲속의 공주)",
-                emoji: "👑💤",
-                features: ["상냥하고 온화한 성격 덕에 반 친구 모두가 나를 편하게 느껴요.", "나만의 소소한 패션 아이템이나 미적 취향이 뚜렷하게 발달해 있어요.", "지나친 간섭이나 강압적인 교칙 아래 있으면 이불 속으로 쏙 도망치고 싶어요."]
-            },
-            INFP: {
-                title: "육지를 꿈꾸는 맑은 영혼의 인어공주",
-                disney: "아리엘 (인어공주)",
-                emoji: "🧜‍♀️🌊",
-                features: ["꿈과 이상을 잃지 않는 아름다운 몽상가 스타일이에요.", "감정선이 섬세하고 여려 사소한 말이나 분위기에도 기분이 훅 바뀔 때가 있어요.", "남들은 '엉뚱하다'고 생각하는 독특한 상상력을 엄청 소중히 간직해요."]
-            },
-            INTP: {
-                title: "엉뚱한 매력의 명탐정",
-                disney: "앨리스 (이상한 나라의 앨리스)",
-                emoji: "🐰🎩",
-                features: ["'선생님, 그건 왜 그래요?' 수업 시간 당연한 것에도 질문을 품는 탐구파예요.", "하나에 흥미를 느끼면 주변의 부름도 잊은 채 무한히 집중해요.", "논리적이지 못한 주장을 마주하면 조용히 팩트로 지적할 때가 있어요."]
-            },
-            ESTP: {
-                title: "자신감 뿜뿜! 분위기 하이재커",
-                disney: "플린 라이더 (라푼젤)",
-                emoji: "🧗‍♂️😏",
-                features: ["임기응변과 스릴을 즐기는 뛰어난 감각의 소유자예요.", "교실 자리에 조용히 앉아 있는 따분한 수업보단 몸을 쓰는 야외 활동이 최고예요.", "유머가 넘치고 센스가 대단해서 한마디로 주위를 초토화하는 유쾌한 매력이 있어요."]
-            },
-            ESFP: {
-                title: "언제나 비타민 충전 100% 비글 요정",
-                disney: "기쁨이 (인사이드 아웃)",
-                emoji: "💛🌈",
-                features: ["슬플 틈을 주지 않는 우주 최강 친화력과 긍정 파워를 자랑해요.", "우리 반에선 내가 모르는 소문이나 비하인드가 존재할 수 없어요.", "리액션이 아주 커서 주위 사람들의 사기 진작에 이바지해요."]
-            },
-            ENFP: {
-                title: "통통 튀는 매력의 탑 밖 상상대장",
-                disney: "라푼젤",
-                emoji: "🍳🎨",
-                features: ["호기심 왕성! 매일 '이것도 해보고 저것도 해봐야지' 열정이 활활 불타요.", "눈물이 참 많고 친구들의 희로애락에 완벽하게 동화되는 울보 대장이에요.", "벌려놓은 동아리와 프로젝트는 많지만 가끔 꼼꼼한 마무리를 빼먹어 머쓱해요."]
-            },
-            ENTP: {
-                title: "능글능글 토론 대회의 황제",
-                disney: "닉 와일드 (주토피아)",
-                emoji: "🦊👔",
-                features: ["똑 부러지는 재치와 장난기 어린 눈빛으로 규칙을 요리조리 파고들어요.", "고루한 전통이나 똑같이 따라 하는 시험 공부방식에 거부감을 느껴요.", "말 한마디로 남들을 설득하거나 상대방과 말싸움할 때 엔돌핀이 막 솟구쳐요."]
-            },
-            ESTJ: {
-                title: "목표를 향해 한 치의 오차도 없는 공주님",
-                disney: "티아나 (공주와 개구리)",
-                emoji: "🐸👑",
-                features: ["시간 엄수, 마감 기한 사수는 나의 우주적인 불문율이에요.", "조장이 되면 칼같이 일을 배분하고 게으름 피우는 조원들을 잘 설득해요.", "현실적인 결과물과 수치화된 등수를 마주할 때 승부욕이 가장 크게 꿈틀대요."]
-            },
-            ESFJ: {
-                title: "언제나 친구 편인 든든한 보안관 대장",
-                disney: "우디 (토이 스토리)",
-                emoji: "🤠⭐",
-                features: ["새 학기 때 소외되는 친구가 보이면 마음이 쓰여 꼭 챙겨주는 착한 영혼이에요.", "선물이나 편지로 소소한 기념일을 살뜰하게 챙기는 걸 너무 좋아해요.", "선생님들과 친구들 사이에서 단단한 신뢰의 아이콘으로 통해요."]
-            },
-            ENFJ: {
-                title: "정의감과 열정으로 똘똘 뭉친 경찰관",
-                disney: "주디 홉스 (주토피아)",
-                emoji: "🐰👮‍♀️",
-                features: ["밝은 에너지와 투철한 정의감으로 반장 자리에 제격인 타입이에요.", "누구든지 주눅 들어 있으면 '넌 할 수 있어!' 진심을 담아 기를 팍팍 살려줘요.", "남들의 조그마한 비판이나 눈길에도 마음의 상처를 은근히 쉽게 입어요."]
-            },
-            ENTJ: {
-                title: "우주 끝까지 지휘하는 든든한 사령관",
-                disney: "버즈 라이트이어 (토이 스토리)",
-                emoji: "🚀🧑‍🚀",
-                features: ["어려운 수행평가를 마주할수록 기가 죽기는커녕 열의에 불타올라요.", "장기적인 대학 진학이나 야심 찬 계획을 미리 짜두고 실천하는 야망가예요.", "우는 소리를 들어주기보단 현실적인 방향을 직설적으로 딱 정리해 주는 깔끔 대왕이에요."]
-            }
+            ISTJ: { title: "규칙을 사랑하는 얼음공주/왕자", disney: "엘사 (겨울왕국)", emoji: "❄️👸", features: ["성실함 끝판왕, 교과서대로 차분하게 공부하는 정석파예요.", "내 준비물이 완벽하게 갖춰지지 않으면 마음이 불안해요.", "친구들 사이에서 무척 어른스럽고 책임감 강하다는 말을 자주 들어요."] },
+            ISFJ: { title: "교실의 마음 따뜻한 유리구두 요정", disney: "신데렐라", emoji: "👡✨", features: ["말은 없지만 주변 친구들의 사소한 장단점이나 성향을 찰떡같이 알아요.", "갈등이나 불화를 가장 싫어하며, 늘 묵묵하게 양보하고 배려해요.", "내 일보다 조원들이 다투지 않고 하하호호 조별과제를 완수하는 게 더 행복해요."] },
+            INFJ: { title: "책 한 권 들고 사색하는 낭만주의자", disney: "벨 (미녀와 야수)", emoji: "🌹📚", features: ["외면보단 내면의 철학과 감수성이 엄청나게 깊은 신비로운 성격이에요.", "친한 소수와 깊은 속얘기를 나누는 대화를 진심으로 즐겨요.", "가끔 책을 읽거나 하늘을 보며 혼자만의 예쁜 비밀 상상에 잠겨요."] },
+            INTJ: { title: "시크하지만 누구보다 철저한 야수왕", disney: "야수 (미녀와 야수)", emoji: "🦁🏰", features: ["체계적인 규칙이 무너지면 효율성이 깨진다고 느껴 화가 날 때가 있어요.", "공부나 학급 활동 시 혼자만의 단단한 완벽주의 전략 루트가 있어요.", "겉은 굉장히 시크해 보이지만 나를 무장해제 시킨 친구에겐 아낌없이 헌신해요."] },
+            ISTP: { title: "실용적이고 쿨한 전장의 해결사", disney: "뮬란", emoji: "⚔️🐉", features: ["평소 에너지를 엄청 아끼는 조용한 성격이지만 위기 대처는 1등이에요.", "귀차니즘이 조금 있어서 벼락치기로 대활약할 때가 많아요.", "말투가 다소 묵직하지만 가끔 뼈 때리는 조언으로 친구들에게 도움을 줘요."] },
+            ISFP: { title: "평화로운 예술가 꿈나무", disney: "오로라 공주 (잠자는 숲속의 공주)", emoji: "👑💤", features: ["상냥하고 온화한 성격 덕에 반 친구 모두가 나를 편하게 느껴요.", "나만의 소소한 패션 아이템이나 미적 취향이 뚜렷하게 발달해 있어요.", "지나친 간섭이나 강압적인 교칙 아래 있으면 이불 속으로 쏙 도망치고 싶어요."] },
+            INFP: { title: "육지를 꿈꾸는 맑은 영혼의 인어공주", disney: "아리엘 (인어공주)", emoji: "🧜‍♀️🌊", features: ["꿈과 이상을 잃지 않는 아름다운 몽상가 스타일이에요.", "감정선이 섬세하고 여려 사소한 말이나 분위기에도 기분이 훅 바뀔 때가 있어요.", "남들은 '엉뚱하다'고 생각하는 독특한 상상력을 엄청 소중히 간직해요."] },
+            INTP: { title: "엉뚱한 매력의 명탐정", disney: "앨리스 (이상한 나라의 앨리스)", emoji: "🐰🎩", features: ["'선생님, 그건 왜 그래요?' 수업 시간 당연한 것에도 질문을 품는 탐구파예요.", "하나에 흥미를 느끼면 주변의 부름도 잊은 채 무한히 집중해요.", "논리적이지 못한 주장을 마주하면 조용히 팩트로 지적할 때가 있어요."] },
+            ESTP: { title: "자신감 뿜뿜! 분위기 하이재커", disney: "플린 라이더 (라푼젤)", emoji: "🧗‍♂️😏", features: ["임기응변과 스릴을 즐기는 뛰어난 감각의 소유자예요.", "교실 자리에 조용히 앉아 있는 따분한 수업보단 몸을 쓰는 야외 활동이 최고예요.", "유머가 넘치고 센스가 대단해서 한마디로 주위를 초토화하는 유쾌한 매력이 있어요."] },
+            ESFP: { title: "언제나 비타민 충전 100% 비글 요정", disney: "기쁨이 (인사이드 아웃)", emoji: "💛🌈", features: ["슬플 틈을 주지 않는 우주 최강 친화력과 긍정 파워를 자랑해요.", "우리 반에선 내가 모르는 소문이나 비하인드가 존재할 수 없어요.", "리액션이 아주 커서 주위 사람들의 사기 진작에 이바지해요."] },
+            ENFP: { title: "통통 튀는 매력의 탑 밖 상상대장", disney: "라푼젤", emoji: "🍳🎨", features: ["호기심 왕성! 매일 '이것도 해보고 저것도 해봐야지' 열정이 활활 불타요.", "눈물이 참 많고 친구들의 희로애락에 완벽하게 동화되는 울보 대장이에요.", "벌려놓은 동아리와 프로젝트는 많지만 가끔 꼼꼼한 마무리를 빼먹어 머쓱해요."] },
+            ENTP: { title: "능글능글 토론 대회의 황제", disney: "닉 와일드 (주토피아)", emoji: "🦊👔", features: ["똑 부러지는 재치와 장난기 어린 눈빛으로 규칙을 요리조리 파고들어요.", "고루한 전통이나 똑같이 따라 하는 시험 공부방식에 거부감을 느껴요.", "말 한마디로 남들을 설득하거나 상대방과 말싸움할 때 엔돌핀이 막 솟구쳐요."] },
+            ESTJ: { title: "목표를 향해 한 치의 오차도 없는 공주님", disney: "티아나 (공주와 개구리)", emoji: "🐸👑", features: ["시간 엄수, 마감 기한 사수는 나의 우주적인 불문율이에요.", "조장이 되면 칼같이 일을 배분하고 게으름 피우는 조원들을 잘 설득해요.", "현실적인 결과물과 수치화된 등수를 마주할 때 승부욕이 가장 크게 꿈틀대요."] },
+            ESFJ: { title: "언제나 친구 편인 든든한 보안관 대장", disney: "우디 (토이 스토리)", emoji: "🤠⭐", features: ["새 학기 때 소외되는 친구가 보이면 마음이 쓰여 꼭 챙겨주는 착한 영혼이에요.", "선물이나 편지로 소소한 기념일을 살뜰하게 챙기는 걸 너무 좋아해요.", "선생님들과 친구들 사이에서 단단한 신뢰의 아이콘으로 통해요."] },
+            ENFJ: { title: "정의감과 열정으로 똘똘 뭉친 경찰관", disney: "주디 홉스 (주토피아)", emoji: "🐰👮‍♀️", features: ["밝은 에너지와 투철한 정의감으로 반장 자리에 제격인 타입이에요.", "누구든지 주눅 들어 있으면 '넌 할 수 있어!' 진심을 담아 기를 팍팍 살려줘요.", "남들의 조그마한 비판이나 눈길에도 마음의 상처를 은근히 쉽게 입어요."] },
+            ENTJ: { title: "우주 끝까지 지휘하는 든든한 사령관", disney: "버즈 라이트이어 (토이 스토리)", emoji: "🚀🧑‍🚀", features: ["어려운 수행평가를 마주할수록 기가 죽기는커녕 열의에 불타올라요.", "장기적인 대학 진학이나 야심 찬 계획을 미리 짜두고 실천하는 야망가예요.", "우는 소리를 들어주기보단 현실적인 방향을 직설적으로 딱 정리해 주는 깔끔 대왕이에요."] }
         };
 
         let currentIdx = 0;
         let scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
         let confettiInterval;
 
-        // 테스트 시작
         function startTest() {
             document.getElementById('start-screen').classList.add('hidden');
             document.getElementById('test-screen').classList.remove('hidden');
@@ -611,7 +528,6 @@
             showQuestion();
         }
 
-        // 질문 표출
         function showQuestion() {
             if (currentIdx >= questions.length) {
                 showResult();
@@ -626,12 +542,10 @@
             buttons[0].innerText = currentQ.a[0].text;
             buttons[1].innerText = currentQ.a[1].text;
 
-            // 프로그레스바 반영
             const percent = (currentIdx / questions.length) * 100;
             document.getElementById('progress').style.width = percent + '%';
         }
 
-        // 답변 클릭
         function selectAnswer(btnIdx) {
             const currentQ = questions[currentIdx];
             const selectedType = currentQ.a[btnIdx].type;
@@ -641,13 +555,11 @@
             showQuestion();
         }
 
-        // 결과 보기
         function showResult() {
             document.getElementById('test-screen').classList.add('hidden');
             document.getElementById('top-home-btn').classList.add('hidden');
             document.getElementById('result-screen').classList.remove('hidden');
 
-            // MBTI 점수 연산
             let mbti = "";
             mbti += (scores.E >= scores.I) ? "E" : "I";
             mbti += (scores.S >= scores.N) ? "S" : "N";
@@ -670,27 +582,22 @@
                 featuresUl.appendChild(li);
             });
 
-            // 이모티콘 파티 시작!
             startConfettiParty();
         }
 
-        // 🏠 처음으로 버튼 확인 모달 노출
         function confirmGoHome() {
             document.getElementById('home-modal').classList.remove('hidden');
         }
 
-        // 모달창 닫기
         function closeHomeModal() {
             document.getElementById('home-modal').classList.add('hidden');
         }
 
-        // 초기화하고 진짜 홈으로 이동
         function goHome() {
             closeHomeModal();
             restartTest();
         }
 
-        // 테스트 완전 리셋
         function restartTest() {
             currentIdx = 0;
             scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
@@ -701,7 +608,7 @@
             document.getElementById('start-screen').classList.remove('hidden');
         }
 
-        /* --- 이모티콘 파티 흩날리기 알고리즘 (HTML Canvas 기반) --- */
+        // 캔버스 이모티콘 파티
         const canvas = document.getElementById('confetti-canvas');
         const ctx = canvas.getContext('2d');
         let emojis = ["🎒", "📚", "🎨", "🐸", "✨", "👑", "🏫", "🌟", "🦁", "🧜‍♀️", "🤠", "🐰", "🍳"];
@@ -768,6 +675,3 @@
     </script>
 </body>
 </html>
-```eof
-
-원하시는 조건에 맞춰 더욱 사랑스럽고 완성도 높은 고품질 웹앱을 완성했습니다! 예쁘게 활용해 보시고 혹시 더 수정하고 싶은 부분이 있다면 언제든 편하게 말씀해 주세요. :)
